@@ -13,6 +13,7 @@
 package io.specto.hoverfly.junit.dsl;
 
 import io.specto.hoverfly.junit.core.model.*;
+import io.specto.hoverfly.junit.dsl.matchers.ExactMatcher;
 import io.specto.hoverfly.junit.dsl.matchers.PlainTextMatcher;
 
 import java.util.ArrayList;
@@ -66,7 +67,11 @@ public class StubServiceBuilder {
      * @return the {@link RequestTemplateBuilder} for further customizations
      */
     public RequestTemplateBuilder get(final String path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("GET"), scheme, destination, exactlyMatches(path));
+        return get(ExactMatcher.newInstance(path));
+    }
+
+    public RequestTemplateBuilder get(final PlainTextMatcher path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("GET"), scheme, destination, path.getFieldMatcher());
     }
 
     /**
@@ -108,6 +113,14 @@ public class StubServiceBuilder {
      */
     public RequestTemplateBuilder patch(final String path) {
         return new RequestTemplateBuilder(this, exactlyMatches("PATCH"), scheme, destination, exactlyMatches(path));
+    }
+
+    public RequestTemplateBuilder anyMethod(String path) {
+        return anyMethod(ExactMatcher.newInstance(path));
+    }
+
+    public RequestTemplateBuilder anyMethod(PlainTextMatcher path) {
+        return new RequestTemplateBuilder(this, null, scheme, destination, path.getFieldMatcher());
     }
 
     /**
