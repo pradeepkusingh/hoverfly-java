@@ -2,15 +2,24 @@ package io.specto.hoverfly.junit.dsl.matchers;
 
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 
-public class GlobMatcher implements PlainTextMatcher {
+class GlobMatcher implements PlainTextMatcher {
 
     private FieldMatcher fieldMatcher;
 
-    private String value;
+    private String pattern;
 
-    public GlobMatcher(String value) {
-        this.value = value;
-        this.fieldMatcher = new FieldMatcher(null, value, null, null, null);
+    private GlobMatcher(String pattern) {
+        this.pattern = pattern;
+        this.fieldMatcher = new FieldMatcher.Builder().globMatch(pattern).build();
+    }
+
+    static GlobMatcher createFromPattern(String pattern) {
+        return new GlobMatcher(pattern);
+    }
+
+    static GlobMatcher createFromStringFormat(String format, String value) {
+        String pattern = String.format(format, value);
+        return new GlobMatcher(pattern);
     }
 
 
@@ -20,7 +29,7 @@ public class GlobMatcher implements PlainTextMatcher {
     }
 
     @Override
-    public String getValue() {
-        return value;
+    public String getPattern() {
+        return pattern;
     }
 }

@@ -9,7 +9,7 @@ public class JsonMatcher implements RequestMatcher {
     }
 
     @Override
-    public String getValue() {
+    public String getPattern() {
         return null;
     }
 }

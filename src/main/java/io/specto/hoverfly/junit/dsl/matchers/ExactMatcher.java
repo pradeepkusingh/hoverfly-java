@@ -4,12 +4,12 @@ import io.specto.hoverfly.junit.core.model.FieldMatcher;
 
 public class ExactMatcher implements PlainTextMatcher {
 
-    private String value;
+    private String pattern;
     private FieldMatcher fieldMatcher;
 
-    ExactMatcher(String value) {
-        this.value = value;
-        this.fieldMatcher = new FieldMatcher(value, null, null, null, null);
+    ExactMatcher(String pattern) {
+        this.pattern = pattern;
+        this.fieldMatcher = new FieldMatcher(pattern, null, null, null, null);
     }
 
     public static FieldMatcher exactlyMatches(String value) {
@@ -22,7 +22,7 @@ public class ExactMatcher implements PlainTextMatcher {
     }
 
     @Override
-    public String getValue() {
-        return value;
+    public String getPattern() {
+        return pattern;
     }
 }
