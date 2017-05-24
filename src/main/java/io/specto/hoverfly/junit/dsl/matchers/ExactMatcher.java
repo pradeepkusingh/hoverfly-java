@@ -2,14 +2,18 @@ package io.specto.hoverfly.junit.dsl.matchers;
 
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 
-public class ExactMatcher implements RequestMatcher {
+public class ExactMatcher implements PlainTextMatcher {
 
-    private String toMatch;
+    private String value;
     private FieldMatcher fieldMatcher;
 
-    public ExactMatcher(String toMatch) {
-        this.toMatch = toMatch;
-        this.fieldMatcher = new FieldMatcher(toMatch, null, null, null, null);
+    ExactMatcher(String value) {
+        this.value = value;
+        this.fieldMatcher = new FieldMatcher(value, null, null, null, null);
+    }
+
+    public static FieldMatcher exactlyMatches(String value) {
+        return new FieldMatcher(value, null, null, null, null);
     }
 
     @Override
@@ -18,7 +22,7 @@ public class ExactMatcher implements RequestMatcher {
     }
 
     @Override
-    public String getToMatch() {
-        return toMatch;
+    public String getValue() {
+        return value;
     }
 }

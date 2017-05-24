@@ -2,15 +2,15 @@ package io.specto.hoverfly.junit.dsl.matchers;
 
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 
-public class GlobMatcher implements RequestMatcher {
+public class GlobMatcher implements PlainTextMatcher {
 
     private FieldMatcher fieldMatcher;
 
-    private String toMatch;
+    private String value;
 
-    public GlobMatcher(String toMatch) {
-        this.toMatch = toMatch;
-        this.fieldMatcher = new FieldMatcher(null, toMatch, null, null, null);
+    public GlobMatcher(String value) {
+        this.value = value;
+        this.fieldMatcher = new FieldMatcher(null, value, null, null, null);
     }
 
 
@@ -20,7 +20,7 @@ public class GlobMatcher implements RequestMatcher {
     }
 
     @Override
-    public String getToMatch() {
-        return toMatch;
+    public String getValue() {
+        return value;
     }
 }

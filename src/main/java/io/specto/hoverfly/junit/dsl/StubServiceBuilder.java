@@ -13,7 +13,7 @@
 package io.specto.hoverfly.junit.dsl;
 
 import io.specto.hoverfly.junit.core.model.*;
-import io.specto.hoverfly.junit.dsl.matchers.RequestMatcher;
+import io.specto.hoverfly.junit.dsl.matchers.PlainTextMatcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
+import static io.specto.hoverfly.junit.dsl.matchers.ExactMatcher.exactlyMatches;
+
 
 /**
  * Used as part of the DSL for creating a {@link RequestResponsePair} used within a Hoverfly Simulation.  Each builder is locked to a single base URL.
@@ -53,7 +54,7 @@ public class StubServiceBuilder {
 
     }
 
-    StubServiceBuilder(RequestMatcher matcher) {
+    StubServiceBuilder(PlainTextMatcher matcher) {
         this.destination = matcher.getFieldMatcher();
     }
 
@@ -62,40 +63,40 @@ public class StubServiceBuilder {
      * Creating a GET request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestMatcherBuilder} for further customizations
+     * @return the {@link RequestTemplateBuilder} for further customizations
      */
-    public RequestMatcherBuilder get(final String path) {
-        return new RequestMatcherBuilder(this, exactlyMatches("GET"), scheme, destination, exactlyMatches(path));
+    public RequestTemplateBuilder get(final String path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("GET"), scheme, destination, exactlyMatches(path));
     }
 
     /**
      * Creating a DELETE request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestMatcherBuilder} for further customizations
+     * @return the {@link RequestTemplateBuilder} for further customizations
      */
-    public RequestMatcherBuilder delete(final String path) {
-        return new RequestMatcherBuilder(this, exactlyMatches("DELETE"), scheme, destination, exactlyMatches(path));
+    public RequestTemplateBuilder delete(final String path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("DELETE"), scheme, destination, exactlyMatches(path));
     }
 
     /**
      * Creating a PUT request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestMatcherBuilder} for further customizations
+     * @return the {@link RequestTemplateBuilder} for further customizations
      */
-    public RequestMatcherBuilder put(final String path) {
-        return new RequestMatcherBuilder(this, exactlyMatches("PUT"), scheme, destination, exactlyMatches(path));
+    public RequestTemplateBuilder put(final String path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("PUT"), scheme, destination, exactlyMatches(path));
     }
 
     /**
      * Creating a POST request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestMatcherBuilder} for further customizations
+     * @return the {@link RequestTemplateBuilder} for further customizations
      */
-    public RequestMatcherBuilder post(final String path) {
-        return new RequestMatcherBuilder(this, exactlyMatches("POST"), scheme, destination, exactlyMatches(path));
+    public RequestTemplateBuilder post(final String path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("POST"), scheme, destination, exactlyMatches(path));
     }
 
 
@@ -103,10 +104,10 @@ public class StubServiceBuilder {
      * Creating a PATCH request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestMatcherBuilder} for further customizations
+     * @return the {@link RequestTemplateBuilder} for further customizations
      */
-    public RequestMatcherBuilder patch(final String path) {
-        return new RequestMatcherBuilder(this, exactlyMatches("PATCH"), scheme, destination, exactlyMatches(path));
+    public RequestTemplateBuilder patch(final String path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("PATCH"), scheme, destination, exactlyMatches(path));
     }
 
     /**
@@ -119,7 +120,7 @@ public class StubServiceBuilder {
     }
 
     /**
-     * Adds a pair to this builder.  Called by the {@link RequestMatcherBuilder#willReturn} in order for the DSL to be expressive such as:
+     * Adds a pair to this builder.  Called by the {@link RequestTemplateBuilder#willReturn} in order for the DSL to be expressive such as:
      * <p>
      * <pre>
      *
