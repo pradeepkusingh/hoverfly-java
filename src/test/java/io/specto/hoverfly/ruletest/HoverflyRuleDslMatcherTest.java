@@ -17,6 +17,7 @@ import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.http.HttpStatus.OK;
 
 public class HoverflyRuleDslMatcherTest {
@@ -28,10 +29,15 @@ public class HoverflyRuleDslMatcherTest {
     @ClassRule
     public static HoverflyRule hoverflyRule = HoverflyRule.inSimulationMode(dsl(
 
-            // Matcher for url
+            // Glob Matcher for url
             service(HoverflyMatchers.matches("www.*-test.com"))
                     .get("/api/bookings/1")
-                    .willReturn(success(HttpBodyConverter.json(booking)))
+                    .willReturn(success(HttpBodyConverter.json(booking))), 
+            
+            // any Matcher for path
+            service("www.always-success.com")
+                .get(any())
+                .willReturn(success())
     ));
 
 
@@ -51,4 +57,15 @@ public class HoverflyRuleDslMatcherTest {
 
     }
 
+    @Test
+    public void shouldReturn200ForAnyGetRequestWhenUsingAnyMatcher() throws Exception {
+        URI uri = UriComponentsBuilder.fromHttpUrl("http://www.always-success.com")
+                .path("/any/api/anything")
+                .build()
+                .toUri();
+        final ResponseEntity<String> response = restTemplate.getForEntity(uri, String.class);
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(OK);
+    }
 }

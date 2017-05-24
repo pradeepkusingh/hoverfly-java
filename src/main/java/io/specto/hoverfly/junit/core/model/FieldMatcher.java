@@ -64,39 +64,39 @@ public class FieldMatcher {
         return builder.build();
     }
 
-    static class Builder {
+    public static class Builder {
         private String exactMatch = null;
         private String globMatch = null;
         private String jsonMatch = null;
         private String regexMatch = null;
         private String xpathMatch = null;
 
-        Builder exactMatch(String exactMatch) {
+        public Builder exactMatch(String exactMatch) {
             this.exactMatch = exactMatch;
             return this;
         }
 
-        Builder globMatch(String globMatch) {
+        public Builder globMatch(String globMatch) {
             this.globMatch = globMatch;
             return this;
         }
 
-        Builder jsonMatch(String jsonMatch) {
+        public Builder jsonMatch(String jsonMatch) {
             this.jsonMatch = jsonMatch;
             return this;
         }
 
-        Builder regexMatch(String regexMatch) {
+        public Builder regexMatch(String regexMatch) {
             this.regexMatch = regexMatch;
             return this;
         }
 
-        Builder xpathMatch(String xpathMatch) {
+        public Builder xpathMatch(String xpathMatch) {
             this.xpathMatch = xpathMatch;
             return this;
         }
 
-        FieldMatcher build() {
+        public FieldMatcher build() {
             return new FieldMatcher(exactMatch, globMatch, jsonMatch, regexMatch, xpathMatch);
         }
     }

@@ -9,6 +9,6 @@ public interface RequestMatcher {
 
     FieldMatcher getFieldMatcher();
 
-    String getValue();
+    String getPattern();
 
 }
