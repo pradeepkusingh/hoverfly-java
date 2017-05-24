@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import io.specto.hoverfly.junit.core.model.RequestResponsePair;
+import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -17,6 +18,7 @@ import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.json;
 import static io.specto.hoverfly.junit.dsl.ResponseBuilder.response;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
+import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.matches;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -67,6 +69,16 @@ public class StubServiceBuilderTest {
     }
 
     @Test
+    public void shouldBuildGetRequestWithPathMatcher() throws Exception {
+        // When
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").get(matches("/api/*/booking")).willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        assertThat(Iterables.getLast(pairs).getRequest().getPath().getGlobMatch()).isEqualTo("/api/*/booking");
+    }
+
+    @Test
     public void shouldBuildPost() {
         // Given
 
@@ -76,6 +88,16 @@ public class StubServiceBuilderTest {
         // Then
         assertThat(pairs).hasSize(1);
         assertThat(Iterables.getLast(pairs).getRequest().getMethod().getExactMatch()).isEqualTo("POST");
+    }
+
+    @Test
+    public void shouldBuildPostRequestWithPathMatcher() throws Exception {
+        // When
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").post(matches("/api/*/booking")).willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        assertThat(Iterables.getLast(pairs).getRequest().getPath().getGlobMatch()).isEqualTo("/api/*/booking");
     }
 
     @Test
@@ -91,6 +113,16 @@ public class StubServiceBuilderTest {
     }
 
     @Test
+    public void shouldBuildPutRequestWithPathMatcher() throws Exception {
+        // When
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").put(matches("/api/*/booking")).willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        assertThat(Iterables.getLast(pairs).getRequest().getPath().getGlobMatch()).isEqualTo("/api/*/booking");
+    }
+
+    @Test
     public void shouldBuildPatchRequest() {
         // Given
 
@@ -100,6 +132,16 @@ public class StubServiceBuilderTest {
         // Then
         assertThat(pairs).hasSize(1);
         assertThat(Iterables.getLast(pairs).getRequest().getMethod().getExactMatch()).isEqualTo("PATCH");
+    }
+
+    @Test
+    public void shouldBuildPatchRequestWithPathMatcher() throws Exception {
+        // When
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").patch(matches("/api/*/booking")).willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        assertThat(Iterables.getLast(pairs).getRequest().getPath().getGlobMatch()).isEqualTo("/api/*/booking");
     }
 
     @Test
@@ -115,12 +157,31 @@ public class StubServiceBuilderTest {
     }
 
     @Test
+    public void shouldBuildDeleteRequestWithPathMatcher() throws Exception {
+        // When
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").delete(matches("/api/*/booking")).willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        assertThat(Iterables.getLast(pairs).getRequest().getPath().getGlobMatch()).isEqualTo("/api/*/booking");
+    }
+
+    @Test
     public void shouldBuildAnyMethodRequest() throws Exception {
         final Set<RequestResponsePair> pairs = service("www.base-url.com").anyMethod("/").willReturn(response()).getRequestResponsePairs();
 
         // Then
         assertThat(pairs).hasSize(1);
         assertThat(Iterables.getLast(pairs).getRequest().getMethod()).isNull();
+    }
+
+    @Test
+    public void shouldBuildAnyMethodRequestWithPathMatcher() throws Exception {
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").anyMethod(matches("/api/*/booking")).willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        assertThat(Iterables.getLast(pairs).getRequest().getPath().getGlobMatch()).isEqualTo("/api/*/booking");
     }
 
     @Test
