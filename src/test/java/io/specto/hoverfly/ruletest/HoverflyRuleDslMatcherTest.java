@@ -1,6 +1,7 @@
 package io.specto.hoverfly.ruletest;
 
 import io.specto.hoverfly.junit.dsl.HttpBodyConverter;
+import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers;
 import io.specto.hoverfly.junit.rule.HoverflyRule;
 import io.specto.hoverfly.models.SimpleBooking;
 import org.junit.ClassRule;
@@ -15,7 +16,6 @@ import java.time.LocalDate;
 import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
-import static io.specto.hoverfly.junit.dsl.matchers.RequestMatcher.matches;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -23,13 +23,13 @@ public class HoverflyRuleDslMatcherTest {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public static SimpleBooking booking = new SimpleBooking(1, "London", "Hong Kong", LocalDate.now());
+    private static SimpleBooking booking = new SimpleBooking(1, "London", "Hong Kong", LocalDate.now());
 
     @ClassRule
     public static HoverflyRule hoverflyRule = HoverflyRule.inSimulationMode(dsl(
 
             // Matcher for url
-            service(matches("www.*-test.com"))
+            service(HoverflyMatchers.matches("www.*-test.com"))
                     .get("/api/bookings/1")
                     .willReturn(success(HttpBodyConverter.json(booking)))
     ));
