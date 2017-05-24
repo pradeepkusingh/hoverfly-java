@@ -54,13 +54,9 @@ public class FieldMatcher {
     }
 
 
-    public static FieldMatcher fromString(String value) {
+    public static FieldMatcher exactlyMatches(String value) {
         Builder builder = new Builder();
-        if (value.contains("*")) {
-            builder.globMatch(value);
-        } else {
-            builder.exactMatch(value);
-        }
+        builder.exactMatch(value);
         return builder.build();
     }
 

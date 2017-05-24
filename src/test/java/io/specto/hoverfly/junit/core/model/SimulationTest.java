@@ -15,7 +15,7 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Set;
 
-import static io.specto.hoverfly.junit.core.model.FieldMatcher.fromString;
+import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimulationTest {
@@ -114,12 +114,12 @@ public class SimulationTest {
 
     private HoverflyData getTestHoverflyData() {
         RequestMatcher request = new RequestMatcher.Builder()
-                .path(fromString("/api/bookings/1"))
-                .method(fromString("GET"))
-                .destination(fromString("www.my-test.com"))
-                .scheme(fromString("http"))
-                .body(fromString(""))
-                .query(fromString(""))
+                .path(exactlyMatches("/api/bookings/1"))
+                .method(exactlyMatches("GET"))
+                .destination(exactlyMatches("www.my-test.com"))
+                .scheme(exactlyMatches("http"))
+                .body(exactlyMatches(""))
+                .query(exactlyMatches(""))
                 .headers(ImmutableMap.of("Content-Type", Lists.newArrayList("text/plain; charset=utf-8")))
                 .build();
         Response response = new Response.Builder()

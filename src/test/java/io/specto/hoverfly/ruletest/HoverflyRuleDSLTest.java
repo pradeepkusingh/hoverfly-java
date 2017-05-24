@@ -27,59 +27,53 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 public class HoverflyRuleDSLTest {
 
     @ClassRule
-    public static HoverflyRule hoverflyRule = HoverflyRule.inSimulationMode();
+    public static HoverflyRule hoverflyRule = HoverflyRule.inSimulationMode(dsl(
+            service("www.my-test.com")
+
+                    .post("/api/bookings").body("{\"flightId\": \"1\"}")
+                    .willReturn(created("http://localhost/api/bookings/1"))
+
+                    .get("/api/bookings/1")
+                    .willReturn(success("{\"bookingId\":\"1\",\"origin\":\"London\",\"destination\":\"Singapore\",\"time\":\"2011-09-01T12:30\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/bookings/1\"}}}", "application/json")),
+
+            service("www.other-anotherservice.com")
+
+                    .put("/api/bookings/1").body("{\"flightId\": \"1\", \"class\": \"PREMIUM\"}")
+                    .willReturn(success())
+
+                    .delete("/api/bookings/*") // loose matching should be converted to glob matcher
+                    .willReturn(noContent())
+
+                    .get("/api/bookings")
+                    .queryParam("class", "business", "premium")
+                    .queryParam("destination", "new york")
+                    .willReturn(success("{\"bookingId\":\"2\",\"origin\":\"London\",\"destination\":\"New York\",\"class\":\"BUSINESS\",\"time\":\"2011-09-01T12:30\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/bookings/2\"}}}", "application/json"))
+
+                    .patch("/api/bookings/1").body("{\"class\": \"BUSINESS\"}")
+                    .willReturn(noContent()),
+
+            service("www.slow-service.com")
+                    .get("/api/bookings")
+                    .willReturn(success())
+
+                    .andDelay(3, TimeUnit.SECONDS).forAll(),
+
+            service("www.other-slow-service.com")
+                    .get("/api/bookings")
+                    .willReturn(success())
+
+                    .post("/api/bookings")
+                    .willReturn(success())
+
+                    .andDelay(3, TimeUnit.SECONDS).forMethod("POST"),
+
+            service("www.not-so-slow-service.com")
+                    .get("/api/bookings")
+                    .willReturn(success().withDelay(1, TimeUnit.SECONDS))
+    ));
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @Before
-    public void setUp() throws Exception {
-
-        hoverflyRule.simulate(dsl(
-                service("www.my-test.com")
-
-                        .post("/api/bookings").body("{\"flightId\": \"1\"}")
-                        .willReturn(created("http://localhost/api/bookings/1"))
-
-                        .get("/api/bookings/1")
-                        .willReturn(success("{\"bookingId\":\"1\",\"origin\":\"London\",\"destination\":\"Singapore\",\"time\":\"2011-09-01T12:30\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/bookings/1\"}}}", "application/json")),
-
-                service("www.other-anotherservice.com")
-
-                        .put("/api/bookings/1").body("{\"flightId\": \"1\", \"class\": \"PREMIUM\"}")
-                        .willReturn(success())
-
-                        .delete("/api/bookings/*") // loose matching should be converted to glob matcher
-                        .willReturn(noContent())
-
-                        .get("/api/bookings")
-                        .queryParam("class", "business", "premium")
-                        .queryParam("destination", "new york")
-                        .willReturn(success("{\"bookingId\":\"2\",\"origin\":\"London\",\"destination\":\"New York\",\"class\":\"BUSINESS\",\"time\":\"2011-09-01T12:30\",\"_links\":{\"self\":{\"href\":\"http://localhost/api/bookings/2\"}}}", "application/json"))
-
-                        .patch("/api/bookings/1").body("{\"class\": \"BUSINESS\"}")
-                        .willReturn(noContent()),
-
-                service("www.slow-service.com")
-                        .get("/api/bookings")
-                        .willReturn(success())
-
-                        .andDelay(3, TimeUnit.SECONDS).forAll(),
-
-                service("www.other-slow-service.com")
-                        .get("/api/bookings")
-                        .willReturn(success())
-
-                        .post("/api/bookings")
-                        .willReturn(success())
-
-                        .andDelay(3, TimeUnit.SECONDS).forMethod("POST"),
-
-                service("www.not-so-slow-service.com")
-                        .get("/api/bookings")
-                        .willReturn(success().withDelay(1, TimeUnit.SECONDS))
-                )
-        );
-    }
 
     @Test
     public void shouldBeAbleToAmendABookingUsingHoverfly() throws URISyntaxException {

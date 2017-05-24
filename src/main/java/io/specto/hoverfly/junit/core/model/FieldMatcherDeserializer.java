@@ -21,7 +21,7 @@ class FieldMatcherDeserializer extends JsonDeserializer<FieldMatcher> {
         if (jsonNode.isObject()) {
             matcher = codec.treeToValue(jsonNode, FieldMatcher.class);
         } else if (jsonNode.isTextual()) {
-            matcher = FieldMatcher.fromString(jsonNode.asText());
+            matcher = FieldMatcher.exactlyMatches(jsonNode.asText());
         }
 
         return matcher;
