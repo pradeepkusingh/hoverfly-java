@@ -21,17 +21,17 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RequestResponsePair {
-    private final RequestMatcher request;
+    private final Request request;
     private final Response response;
 
     @JsonCreator
-    public RequestResponsePair(@JsonProperty("request") RequestMatcher request,
+    public RequestResponsePair(@JsonProperty("request") Request request,
                                @JsonProperty("response") Response response) {
         this.request = request;
         this.response = response;
     }
 
-    public RequestMatcher getRequest() {
+    public Request getRequest() {
         return request;
     }
 

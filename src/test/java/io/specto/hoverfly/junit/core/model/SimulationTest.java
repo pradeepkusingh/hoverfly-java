@@ -98,8 +98,8 @@ public class SimulationTest {
         Set<RequestResponsePair> pairs = actual.getHoverflyData().getPairs();
 
         assertThat(pairs).hasSize(1);
-        RequestMatcher request = pairs.iterator().next().getRequest();
-        assertThat(request.getRequestType()).isEqualTo(RequestMatcher.RequestType.RECORDING);
+        Request request = pairs.iterator().next().getRequest();
+        assertThat(request.getRequestType()).isEqualTo(Request.RequestType.RECORDING);
         assertThat(request.getHeaders()).isEmpty();
 
     }
@@ -113,7 +113,7 @@ public class SimulationTest {
 
 
     private HoverflyData getTestHoverflyData() {
-        RequestMatcher request = new RequestMatcher.Builder()
+        Request request = new Request.Builder()
                 .path(exactlyMatches("/api/bookings/1"))
                 .method(exactlyMatches("GET"))
                 .destination(exactlyMatches("www.my-test.com"))

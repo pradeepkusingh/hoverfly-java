@@ -25,11 +25,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
+import static io.specto.hoverfly.junit.core.model.FieldMatcher.fromString;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-public class RequestMatcher {
+public class Request {
 
     @JsonDeserialize(using = FieldMatcherDeserializer.class)
     private final FieldMatcher path;
@@ -48,31 +48,31 @@ public class RequestMatcher {
     private RequestType requestType;
 
     @Deprecated
-    public RequestMatcher(String path,
-                          String method,
-                          String destination,
-                          String scheme,
-                          String query,
-                          String body,
-                          Map<String, List<String>> headers) {
-        this.path = exactlyMatches(path);
-        this.method = exactlyMatches(method);
-        this.destination = exactlyMatches(destination);
-        this.scheme = exactlyMatches(scheme);
-        this.query = exactlyMatches(query);
-        this.body = exactlyMatches(body);
+    public Request(String path,
+                   String method,
+                   String destination,
+                   String scheme,
+                   String query,
+                   String body,
+                   Map<String, List<String>> headers) {
+        this.path = fromString(path);
+        this.method = fromString(method);
+        this.destination = fromString(destination);
+        this.scheme = fromString(scheme);
+        this.query = fromString(query);
+        this.body = fromString(body);
         this.headers = headers;
     }
 
 
     @JsonCreator
-    public RequestMatcher(@JsonProperty("path") FieldMatcher path,
-                          @JsonProperty("method") FieldMatcher method,
-                          @JsonProperty("destination") FieldMatcher destination,
-                          @JsonProperty("scheme") FieldMatcher scheme,
-                          @JsonProperty("query") FieldMatcher query,
-                          @JsonProperty("body") FieldMatcher body,
-                          @JsonProperty("headers") Map<String, List<String>> headers) {
+    public Request(@JsonProperty("path") FieldMatcher path,
+                   @JsonProperty("method") FieldMatcher method,
+                   @JsonProperty("destination") FieldMatcher destination,
+                   @JsonProperty("scheme") FieldMatcher scheme,
+                   @JsonProperty("query") FieldMatcher query,
+                   @JsonProperty("body") FieldMatcher body,
+                   @JsonProperty("headers") Map<String, List<String>> headers) {
         this.path = path;
         this.method = method;
         this.destination = destination;
@@ -164,8 +164,8 @@ public class RequestMatcher {
             return this;
         }
 
-        RequestMatcher build() {
-            return new RequestMatcher(path, method, destination, scheme, query, body, headers);
+        Request build() {
+            return new Request(path, method, destination, scheme, query, body, headers);
         }
     }
 
