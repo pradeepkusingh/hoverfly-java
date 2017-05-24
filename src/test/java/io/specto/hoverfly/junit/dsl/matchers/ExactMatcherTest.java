@@ -10,7 +10,7 @@ public class ExactMatcherTest {
 
     @Test
     public void shouldCreateExactMatcher() throws Exception {
-        FieldMatcher expected = new FieldMatcher("match.me", null, null, null, null);
+        FieldMatcher expected = new FieldMatcher.Builder().exactMatch("match.me").build();
 
         FieldMatcher actual = ExactMatcher.newInstance("match.me").getFieldMatcher();
 
@@ -19,7 +19,7 @@ public class ExactMatcherTest {
 
     @Test
     public void shouldExactlyMatchesReturnFieldMatcher() throws Exception {
-        FieldMatcher expected = new FieldMatcher("match.me", null, null, null, null);
+        FieldMatcher expected = new FieldMatcher.Builder().exactMatch("match.me").build();
 
         FieldMatcher actual = ExactMatcher.exactlyMatches("match.me");
 

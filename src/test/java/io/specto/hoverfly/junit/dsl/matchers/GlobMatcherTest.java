@@ -16,7 +16,7 @@ public class GlobMatcherTest {
         FieldMatcher fieldMatcher = matcher.getFieldMatcher();
 
 
-        FieldMatcher expected = new FieldMatcher(null, "fo*o", null, null, null);
+        FieldMatcher expected = new FieldMatcher.Builder().globMatch("fo*o").build();
         assertThat(fieldMatcher).isEqualTo(expected);
     }
 }

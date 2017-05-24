@@ -14,21 +14,27 @@ public class FieldMatcher {
 
     private final String exactMatch;
     private final String globMatch;
-    private final String jsonMatch;
     private final String regexMatch;
+    private final String jsonMatch;
+    private final String jsonPathMatch;
+    private final String xmlMatch;
     private final String xpathMatch;
 
 
     @JsonCreator
     public FieldMatcher(@JsonProperty("exactMatch") String exactMatch,
                         @JsonProperty("globMatch") String globMatch,
-                        @JsonProperty("jsonMatch") String jsonMatch,
                         @JsonProperty("regexMatch") String regexMatch,
+                        @JsonProperty("jsonMatch") String jsonMatch,
+                        @JsonProperty("jsonPathMatch") String jsonPathMatch,
+                        @JsonProperty("xmlMatch") String xmlMatch,
                         @JsonProperty("xpathMatch") String xpathMatch) {
         this.exactMatch = exactMatch;
         this.globMatch = globMatch;
         this.jsonMatch = jsonMatch;
         this.regexMatch = regexMatch;
+        this.jsonPathMatch = jsonPathMatch;
+        this.xmlMatch = xmlMatch;
         this.xpathMatch = xpathMatch;
     }
 
@@ -53,6 +59,13 @@ public class FieldMatcher {
         return xpathMatch;
     }
 
+    public String getJsonPathMatch() {
+        return jsonPathMatch;
+    }
+
+    public String getXmlMatch() {
+        return xmlMatch;
+    }
 
     static FieldMatcher fromString(String value) {
         Builder builder = new Builder();
@@ -67,8 +80,10 @@ public class FieldMatcher {
     public static class Builder {
         private String exactMatch = null;
         private String globMatch = null;
-        private String jsonMatch = null;
         private String regexMatch = null;
+        private String jsonMatch = null;
+        private String jsonPathMatch = null;
+        private String xmlMatch = null;
         private String xpathMatch = null;
 
         public Builder exactMatch(String exactMatch) {
@@ -81,13 +96,23 @@ public class FieldMatcher {
             return this;
         }
 
+        public Builder regexMatch(String regexMatch) {
+            this.regexMatch = regexMatch;
+            return this;
+        }
+
         public Builder jsonMatch(String jsonMatch) {
             this.jsonMatch = jsonMatch;
             return this;
         }
 
-        public Builder regexMatch(String regexMatch) {
-            this.regexMatch = regexMatch;
+        public Builder jsonPathMatch(String jsonPathMatch) {
+            this.jsonPathMatch = jsonPathMatch;
+            return this;
+        }
+
+        public Builder xmlMatch(String xmlMatch) {
+            this.xmlMatch = xmlMatch;
             return this;
         }
 
@@ -97,7 +122,7 @@ public class FieldMatcher {
         }
 
         public FieldMatcher build() {
-            return new FieldMatcher(exactMatch, globMatch, jsonMatch, regexMatch, xpathMatch);
+            return new FieldMatcher(exactMatch, globMatch, regexMatch, jsonMatch, jsonPathMatch, xmlMatch, xpathMatch);
         }
     }
 
