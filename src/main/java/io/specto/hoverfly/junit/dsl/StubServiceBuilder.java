@@ -81,7 +81,11 @@ public class StubServiceBuilder {
      * @return the {@link RequestTemplateBuilder} for further customizations
      */
     public RequestTemplateBuilder delete(final String path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("DELETE"), scheme, destination, exactlyMatches(path));
+        return delete(ExactMatcher.newInstance(path));
+    }
+
+    public RequestTemplateBuilder delete(PlainTextMatcher path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("DELETE"), scheme, destination, path.getFieldMatcher());
     }
 
     /**
@@ -91,7 +95,12 @@ public class StubServiceBuilder {
      * @return the {@link RequestTemplateBuilder} for further customizations
      */
     public RequestTemplateBuilder put(final String path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("PUT"), scheme, destination, exactlyMatches(path));
+        return put(ExactMatcher.newInstance(path));
+    }
+
+
+    public RequestTemplateBuilder put(PlainTextMatcher path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("PUT"), scheme, destination, path.getFieldMatcher());
     }
 
     /**
@@ -101,9 +110,12 @@ public class StubServiceBuilder {
      * @return the {@link RequestTemplateBuilder} for further customizations
      */
     public RequestTemplateBuilder post(final String path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("POST"), scheme, destination, exactlyMatches(path));
+        return post(ExactMatcher.newInstance(path));
     }
 
+    public RequestTemplateBuilder post(PlainTextMatcher path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("POST"), scheme, destination, path.getFieldMatcher());
+    }
 
     /**
      * Creating a PATCH request matcher
@@ -112,7 +124,11 @@ public class StubServiceBuilder {
      * @return the {@link RequestTemplateBuilder} for further customizations
      */
     public RequestTemplateBuilder patch(final String path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("PATCH"), scheme, destination, exactlyMatches(path));
+        return patch(ExactMatcher.newInstance(path));
+    }
+
+    public RequestTemplateBuilder patch(PlainTextMatcher path) {
+        return new RequestTemplateBuilder(this, exactlyMatches("PATCH"), scheme, destination, path.getFieldMatcher());
     }
 
     public RequestTemplateBuilder anyMethod(String path) {
@@ -154,7 +170,6 @@ public class StubServiceBuilder {
     String getDestination() {
         return this.destination.getExactMatch();
     }
-
     /**
      * Adds service wide delay settings.
      *
