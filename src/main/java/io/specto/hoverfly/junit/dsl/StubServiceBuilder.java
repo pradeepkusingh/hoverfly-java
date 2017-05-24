@@ -13,6 +13,7 @@
 package io.specto.hoverfly.junit.dsl;
 
 import io.specto.hoverfly.junit.core.model.*;
+import io.specto.hoverfly.junit.dsl.matchers.RequestMatcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -52,7 +53,7 @@ public class StubServiceBuilder {
 
     }
 
-    StubServiceBuilder(io.specto.hoverfly.junit.dsl.matchers.RequestMatcher matcher) {
+    StubServiceBuilder(RequestMatcher matcher) {
         this.destination = matcher.getFieldMatcher();
     }
 
@@ -135,8 +136,9 @@ public class StubServiceBuilder {
      *
      * @return service destination
      */
+    // TODO it needs to support glob pattern
     String getDestination() {
-        return this.destination.toString();
+        return this.destination.getExactMatch();
     }
 
     /**
@@ -165,8 +167,8 @@ public class StubServiceBuilder {
         }
     }
 
-    StubServiceBuilder addDelaySetting(final RequestMatcher requestMatcher, final ResponseBuilder responseBuilder) {
-        responseBuilder.addDelay().to(this).forRequest(requestMatcher);
+    StubServiceBuilder addDelaySetting(final Request request, final ResponseBuilder responseBuilder) {
+        responseBuilder.addDelay().to(this).forRequest(request);
         return this;
     }
 }

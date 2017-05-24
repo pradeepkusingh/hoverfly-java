@@ -34,13 +34,13 @@ public class StubServiceBuilderTest {
     }
 
     @Test
-    public void shouldDefaultToHttpScheme() throws Exception {
+    public void shouldIgnoreSchemeIfItIsNotSet() throws Exception {
         final Set<RequestResponsePair> pairs = service("www.my-test.com").get("/").willReturn(response()).getRequestResponsePairs();
 
         assertThat(pairs).hasSize(1);
         RequestResponsePair pair = pairs.iterator().next();
         assertThat(pair.getRequest().getDestination().getExactMatch()).isEqualTo("www.my-test.com");
-        assertThat(pair.getRequest().getScheme().getExactMatch()).isEqualTo("http");
+        assertThat(pair.getRequest().getScheme()).isNull();
 
     }
 

@@ -1,7 +1,7 @@
 package io.specto.hoverfly.junit.dsl;
 
 import io.specto.hoverfly.junit.core.model.DelaySettings;
-import io.specto.hoverfly.junit.core.model.RequestMatcher;
+import io.specto.hoverfly.junit.core.model.Request;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,9 +18,9 @@ public class ResponseDelaySettingsBuilder extends AbstractDelaySettingsBuilder {
         return this;
     }
 
-    void forRequest(RequestMatcher requestMatcher) {
+    void forRequest(Request request) {
         if (isValid()) {
-            String path = requestMatcher.getDestination().getExactMatch() + requestMatcher.getPath().getExactMatch();
+            String path = request.getDestination().getExactMatch() + request.getPath().getExactMatch();
             invoker.addDelaySetting(new DelaySettings(toPattern(path), getConvertedDelay(), null));
         }
     }

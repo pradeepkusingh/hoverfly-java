@@ -60,6 +60,16 @@ public class FieldMatcher {
         return builder.build();
     }
 
+    static FieldMatcher fromString(String value) {
+        Builder builder = new Builder();
+        if (value.contains("*")) {
+            builder.globMatch(value);
+        } else {
+            builder.exactMatch(value);
+        }
+        return builder.build();
+    }
+
     static class Builder {
         private String exactMatch = null;
         private String globMatch = null;

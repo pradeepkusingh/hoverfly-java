@@ -13,7 +13,7 @@
 package io.specto.hoverfly.junit.dsl;
 
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
-import io.specto.hoverfly.junit.core.model.RequestMatcher;
+import io.specto.hoverfly.junit.core.model.Request;
 import io.specto.hoverfly.junit.core.model.RequestResponsePair;
 
 import java.io.UnsupportedEncodingException;
@@ -30,7 +30,7 @@ import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
 import static org.apache.commons.lang3.CharEncoding.UTF_8;
 
 /**
- * A builder for {@link RequestMatcher}
+ * A builder for {@link Request}
  */
 public class RequestMatcherBuilder {
 
@@ -102,17 +102,17 @@ public class RequestMatcherBuilder {
      * @see ResponseBuilder
      */
     public StubServiceBuilder willReturn(final ResponseBuilder responseBuilder) {
-        RequestMatcher requestMatcher = this.build();
+        Request request = this.build();
         return invoker
-                .addRequestResponsePair(new RequestResponsePair(requestMatcher, responseBuilder.build()))
-                .addDelaySetting(requestMatcher, responseBuilder);
+                .addRequestResponsePair(new RequestResponsePair(request, responseBuilder.build()))
+                .addDelaySetting(request, responseBuilder);
     }
 
-    private RequestMatcher build() {
+    private Request build() {
         String query = queryParams.entrySet().stream()
                 .flatMap(e -> e.getValue().stream().map(v -> encodeUrl(e.getKey()) + "=" + encodeUrl(v)))
                 .collect(Collectors.joining("&"));
-        return new RequestMatcher(path, method, destination, scheme, exactlyMatches(query), body, headers);
+        return new Request(path, method, destination, scheme, exactlyMatches(query), body, headers);
     }
 
     private String encodeUrl(String str) {
