@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static io.specto.hoverfly.junit.core.model.FieldMatcher.fromString;
+import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
 import static org.apache.commons.lang3.CharEncoding.UTF_8;
 
 /**
@@ -43,18 +43,13 @@ public class RequestMatcherBuilder {
     private final Map<String, List<String>> headers = new HashMap<>();
     private FieldMatcher body;
 
-    private RequestMatcherBuilder(final StubServiceBuilder invoker, final String method, final String scheme, final String destination, final String path) {
+    RequestMatcherBuilder(final StubServiceBuilder invoker, final FieldMatcher method, final FieldMatcher scheme, final FieldMatcher destination, final FieldMatcher path) {
         this.invoker = invoker;
-        this.method = fromString(method);
-        this.scheme = fromString(scheme);
-        this.destination = fromString(destination);
-        this.path = fromString(path);
+        this.method = method;
+        this.scheme = scheme;
+        this.destination = destination;
+        this.path = path;
     }
-
-    static RequestMatcherBuilder requestMatcherBuilder(final StubServiceBuilder invoker, final String method, final String scheme, final String destination, final String path) {
-        return new RequestMatcherBuilder(invoker, method, scheme, destination, path);
-    }
-
 
     /**
      * Sets the request body
@@ -62,7 +57,7 @@ public class RequestMatcherBuilder {
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
     public RequestMatcherBuilder body(final String body) {
-        this.body = fromString(body);
+        this.body = exactlyMatches(body);
         return this;
     }
 
@@ -72,7 +67,7 @@ public class RequestMatcherBuilder {
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
     public RequestMatcherBuilder body(HttpBodyConverter httpBodyConverter) {
-        this.body = fromString(httpBodyConverter.body());
+        this.body = exactlyMatches(httpBodyConverter.body());
         return this;
     }
 
@@ -117,7 +112,7 @@ public class RequestMatcherBuilder {
         String query = queryParams.entrySet().stream()
                 .flatMap(e -> e.getValue().stream().map(v -> encodeUrl(e.getKey()) + "=" + encodeUrl(v)))
                 .collect(Collectors.joining("&"));
-        return new RequestMatcher(path, method, destination, scheme, fromString(query), body, headers);
+        return new RequestMatcher(path, method, destination, scheme, exactlyMatches(query), body, headers);
     }
 
     private String encodeUrl(String str) {

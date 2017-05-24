@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static io.specto.hoverfly.junit.core.model.FieldMatcher.fromString;
+import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -55,12 +55,12 @@ public class RequestMatcher {
                           String query,
                           String body,
                           Map<String, List<String>> headers) {
-        this.path = fromString(path);
-        this.method = fromString(method);
-        this.destination = fromString(destination);
-        this.scheme = fromString(scheme);
-        this.query = fromString(query);
-        this.body = fromString(body);
+        this.path = exactlyMatches(path);
+        this.method = exactlyMatches(method);
+        this.destination = exactlyMatches(destination);
+        this.scheme = exactlyMatches(scheme);
+        this.query = exactlyMatches(query);
+        this.body = exactlyMatches(body);
         this.headers = headers;
     }
 

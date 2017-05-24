@@ -12,6 +12,8 @@
  */
 package io.specto.hoverfly.junit.dsl;
 
+import io.specto.hoverfly.junit.dsl.matchers.RequestMatcher;
+
 /**
  * Entry point to a DSL which can be used to generate a Hoverfly simulation.  Example code:
  * <pre>
@@ -63,4 +65,10 @@ public class HoverflyDsl {
     public static StubServiceBuilder service(final String baseUrl) {
         return new StubServiceBuilder(baseUrl);
     }
+
+    public static StubServiceBuilder service(final RequestMatcher matcher) {
+        return new StubServiceBuilder(matcher);
+    }
+
+
 }
