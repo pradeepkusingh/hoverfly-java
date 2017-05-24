@@ -115,6 +115,15 @@ public class StubServiceBuilderTest {
     }
 
     @Test
+    public void shouldBuildAnyMethodRequest() throws Exception {
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").anyMethod("/").willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        assertThat(Iterables.getLast(pairs).getRequest().getMethod()).isNull();
+    }
+
+    @Test
     public void shouldAutomaticallyMarshallJson() {
         // When
         final RequestResponsePair requestResponsePair =

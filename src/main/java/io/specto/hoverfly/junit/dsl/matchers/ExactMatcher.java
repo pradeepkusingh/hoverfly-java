@@ -7,13 +7,18 @@ public class ExactMatcher implements PlainTextMatcher {
     private String pattern;
     private FieldMatcher fieldMatcher;
 
-    ExactMatcher(String pattern) {
+    private ExactMatcher(String pattern) {
         this.pattern = pattern;
-        this.fieldMatcher = new FieldMatcher(pattern, null, null, null, null);
+        this.fieldMatcher = exactlyMatches(pattern);
+    }
+
+
+    public static ExactMatcher newInstance(String value) {
+        return new ExactMatcher(value);
     }
 
     public static FieldMatcher exactlyMatches(String value) {
-        return new FieldMatcher(value, null, null, null, null);
+        return new FieldMatcher.Builder().exactMatch(value).build();
     }
 
     @Override

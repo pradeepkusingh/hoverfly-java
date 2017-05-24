@@ -6,7 +6,9 @@ import io.specto.hoverfly.junit.rule.HoverflyRule;
 import io.specto.hoverfly.models.SimpleBooking;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -15,9 +17,12 @@ import java.time.LocalDate;
 
 import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
+import static io.specto.hoverfly.junit.dsl.ResponseCreators.serverError;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
+import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.startsWith;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
 
 public class HoverflyRuleDslMatcherTest {
@@ -34,10 +39,15 @@ public class HoverflyRuleDslMatcherTest {
                     .get("/api/bookings/1")
                     .willReturn(success(HttpBodyConverter.json(booking))), 
             
-            // any Matcher for path
+            // Match any path
             service("www.always-success.com")
-                .get(any())
-                .willReturn(success())
+                .get(HoverflyMatchers.any())
+                .willReturn(success()),
+
+            // Match any method
+            service("www.booking-is-down.com")
+                .anyMethod(startsWith("/api/bookings/"))
+                .willReturn(serverError().body("booking is down"))
     ));
 
 
@@ -67,5 +77,22 @@ public class HoverflyRuleDslMatcherTest {
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(OK);
+    }
+
+    @Test
+    public void shouldFailOnAnyMethodToBookingIsDownService() throws Exception {
+        URI uri = UriComponentsBuilder.fromHttpUrl("http://www.booking-is-down.com")
+                .path("/api/bookings/12345")
+                .build()
+                .toUri();
+        Throwable throwable = catchThrowable(() -> restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class));
+
+        assertThat(throwable).isInstanceOf(HttpServerErrorException.class);
+
+        HttpServerErrorException exception = (HttpServerErrorException) throwable;
+
+        // Then
+        assertThat(exception.getStatusCode()).isEqualTo(INTERNAL_SERVER_ERROR);
+        assertThat(exception.getResponseBodyAsString()).isEqualTo("booking is down");
     }
 }
