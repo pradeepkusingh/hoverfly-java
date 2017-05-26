@@ -16,3 +16,4 @@ This section describes the core functionality of Hoverfly Java.
     configuration
     ssl
     remotehoverfly
+    client

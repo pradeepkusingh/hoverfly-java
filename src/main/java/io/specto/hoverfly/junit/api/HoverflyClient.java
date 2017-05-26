@@ -27,11 +27,18 @@ public interface HoverflyClient {
     boolean getHealth();
 
     /**
-     * Static factory method for creating a Hoverfly client builder
-     * @return a builder for Hoverfly Client
+     * Static factory method for creating a {@link HoverflyClientBuilder}
+     * @return a builder for HoverflyClient
      */
-    static HoverflyClientBuilder newInstance() {
+    static HoverflyClientBuilder custom() {
         return new HoverflyClientBuilder();
     }
 
+    /**
+     * Static factory method for default Hoverfly client
+     * @return a default HoverflyClient
+     */
+    static HoverflyClient createDefault() {
+        return new HoverflyClientBuilder().build();
+    }
 }
