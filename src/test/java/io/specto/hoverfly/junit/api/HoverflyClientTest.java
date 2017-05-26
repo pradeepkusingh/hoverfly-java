@@ -8,8 +8,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
-import static io.specto.hoverfly.junit.core.HoverflyConfig.configs;
-import static io.specto.hoverfly.junit.core.HoverflyConstants.HTTPS;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +32,7 @@ public class HoverflyClientTest {
     public void shouldBeAbleToCreateNewInstanceOfHoverflyClient() throws Exception {
 
 
-        HoverflyClient hoverflyClient = HoverflyClient.newInstance()
+        HoverflyClient hoverflyClient = HoverflyClient.custom()
                 .port(configuration.getAdminPort())
                 .build();
 
@@ -50,7 +48,7 @@ public class HoverflyClientTest {
                         .header("Authorization", "Bearer some-token")
                     .willReturn(success())
         ));
-        HoverflyClient hoverflyClient = HoverflyClient.newInstance()
+        HoverflyClient hoverflyClient = HoverflyClient.custom()
                 .host("remote.host")
                 .port(12345)
                 .withAuthToken()
