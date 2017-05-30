@@ -2,7 +2,7 @@ package io.specto.hoverfly.junit.dsl.matchers;
 
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 
-public class XPathMatcher implements RequestMatcher {
+public class XPathMatcher implements RequestFieldMatcher {
 
     private String pattern;
     private FieldMatcher fieldMatcher;
