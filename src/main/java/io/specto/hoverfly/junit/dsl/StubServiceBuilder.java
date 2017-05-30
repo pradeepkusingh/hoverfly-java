@@ -14,7 +14,7 @@ package io.specto.hoverfly.junit.dsl;
 
 import io.specto.hoverfly.junit.core.model.*;
 import io.specto.hoverfly.junit.dsl.matchers.ExactMatcher;
-import io.specto.hoverfly.junit.dsl.matchers.PlainTextMatcher;
+import io.specto.hoverfly.junit.dsl.matchers.PlainTextFieldMatcher;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -55,7 +55,7 @@ public class StubServiceBuilder {
 
     }
 
-    StubServiceBuilder(PlainTextMatcher matcher) {
+    StubServiceBuilder(PlainTextFieldMatcher matcher) {
         this.destination = matcher.getFieldMatcher();
     }
 
@@ -64,79 +64,79 @@ public class StubServiceBuilder {
      * Creating a GET request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder get(final String path) {
+    public RequestMatcherBuilder get(final String path) {
         return get(ExactMatcher.newInstance(path));
     }
 
-    public RequestTemplateBuilder get(final PlainTextMatcher path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("GET"), scheme, destination, path.getFieldMatcher());
+    public RequestMatcherBuilder get(final PlainTextFieldMatcher path) {
+        return new RequestMatcherBuilder(this, exactlyMatches("GET"), scheme, destination, path.getFieldMatcher());
     }
 
     /**
      * Creating a DELETE request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder delete(final String path) {
+    public RequestMatcherBuilder delete(final String path) {
         return delete(ExactMatcher.newInstance(path));
     }
 
-    public RequestTemplateBuilder delete(PlainTextMatcher path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("DELETE"), scheme, destination, path.getFieldMatcher());
+    public RequestMatcherBuilder delete(PlainTextFieldMatcher path) {
+        return new RequestMatcherBuilder(this, exactlyMatches("DELETE"), scheme, destination, path.getFieldMatcher());
     }
 
     /**
      * Creating a PUT request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder put(final String path) {
+    public RequestMatcherBuilder put(final String path) {
         return put(ExactMatcher.newInstance(path));
     }
 
 
-    public RequestTemplateBuilder put(PlainTextMatcher path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("PUT"), scheme, destination, path.getFieldMatcher());
+    public RequestMatcherBuilder put(PlainTextFieldMatcher path) {
+        return new RequestMatcherBuilder(this, exactlyMatches("PUT"), scheme, destination, path.getFieldMatcher());
     }
 
     /**
      * Creating a POST request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder post(final String path) {
+    public RequestMatcherBuilder post(final String path) {
         return post(ExactMatcher.newInstance(path));
     }
 
-    public RequestTemplateBuilder post(PlainTextMatcher path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("POST"), scheme, destination, path.getFieldMatcher());
+    public RequestMatcherBuilder post(PlainTextFieldMatcher path) {
+        return new RequestMatcherBuilder(this, exactlyMatches("POST"), scheme, destination, path.getFieldMatcher());
     }
 
     /**
      * Creating a PATCH request matcher
      *
      * @param path the path you want the matcher to have
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder patch(final String path) {
+    public RequestMatcherBuilder patch(final String path) {
         return patch(ExactMatcher.newInstance(path));
     }
 
-    public RequestTemplateBuilder patch(PlainTextMatcher path) {
-        return new RequestTemplateBuilder(this, exactlyMatches("PATCH"), scheme, destination, path.getFieldMatcher());
+    public RequestMatcherBuilder patch(PlainTextFieldMatcher path) {
+        return new RequestMatcherBuilder(this, exactlyMatches("PATCH"), scheme, destination, path.getFieldMatcher());
     }
 
-    public RequestTemplateBuilder anyMethod(String path) {
+    public RequestMatcherBuilder anyMethod(String path) {
         return anyMethod(ExactMatcher.newInstance(path));
     }
 
-    public RequestTemplateBuilder anyMethod(PlainTextMatcher path) {
-        return new RequestTemplateBuilder(this, null, scheme, destination, path.getFieldMatcher());
+    public RequestMatcherBuilder anyMethod(PlainTextFieldMatcher path) {
+        return new RequestMatcherBuilder(this, null, scheme, destination, path.getFieldMatcher());
     }
 
     /**
@@ -149,7 +149,7 @@ public class StubServiceBuilder {
     }
 
     /**
-     * Adds a pair to this builder.  Called by the {@link RequestTemplateBuilder#willReturn} in order for the DSL to be expressive such as:
+     * Adds a pair to this builder.  Called by the {@link RequestMatcherBuilder#willReturn} in order for the DSL to be expressive such as:
      * <p>
      * <pre>
      *

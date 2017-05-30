@@ -1,6 +1,5 @@
 package io.specto.hoverfly.ruletest;
 
-import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers;
 import io.specto.hoverfly.junit.rule.HoverflyRule;
 import io.specto.hoverfly.models.SimpleBooking;
 import org.junit.ClassRule;
@@ -36,7 +35,7 @@ public class HoverflyRuleDslMatcherTest {
     public static HoverflyRule hoverflyRule = HoverflyRule.inSimulationMode(dsl(
 
             // Glob Matcher for url
-            service(HoverflyMatchers.matches("www.*-test.com"))
+            service(matches("www.*-test.com"))
                     .get("/api/bookings/1")
                     .willReturn(success(json(booking)))
 

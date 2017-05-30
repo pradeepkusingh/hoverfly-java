@@ -11,7 +11,7 @@ public class HoverflyMatchersTest {
     @Test
     public void matchesShouldCreateGlobMatcher() throws Exception {
 
-        PlainTextMatcher matcher = HoverflyMatchers.matches("fo*o");
+        PlainTextFieldMatcher matcher = HoverflyMatchers.matches("fo*o");
 
         assertThat(matcher).isInstanceOf(GlobMatcher.class);
         assertThat(matcher.getPattern()).isEqualTo("fo*o");
@@ -19,7 +19,7 @@ public class HoverflyMatchersTest {
 
     @Test
     public void startsWithShouldCreateGlobMatcher() throws Exception {
-        PlainTextMatcher matcher = HoverflyMatchers.startsWith("foo");
+        PlainTextFieldMatcher matcher = HoverflyMatchers.startsWith("foo");
 
         assertThat(matcher).isInstanceOf(GlobMatcher.class);
         assertThat(matcher.getPattern()).isEqualTo("foo*");
@@ -28,7 +28,7 @@ public class HoverflyMatchersTest {
 
     @Test
     public void endsWithShouldCreateGlobMatcher() throws Exception {
-        PlainTextMatcher matcher = HoverflyMatchers.endsWith("foo");
+        PlainTextFieldMatcher matcher = HoverflyMatchers.endsWith("foo");
 
         assertThat(matcher).isInstanceOf(GlobMatcher.class);
         assertThat(matcher.getPattern()).isEqualTo("*foo");
@@ -36,7 +36,7 @@ public class HoverflyMatchersTest {
 
     @Test
     public void containsShouldCreateGlobMatcher() throws Exception {
-        PlainTextMatcher matcher = HoverflyMatchers.contains("foo");
+        PlainTextFieldMatcher matcher = HoverflyMatchers.contains("foo");
 
         assertThat(matcher).isInstanceOf(GlobMatcher.class);
         assertThat(matcher.getPattern()).isEqualTo("*foo*");
@@ -44,7 +44,7 @@ public class HoverflyMatchersTest {
 
     @Test
     public void anyShouldCreateGlobMatcher() throws Exception {
-        PlainTextMatcher matcher = HoverflyMatchers.any();
+        PlainTextFieldMatcher matcher = HoverflyMatchers.any();
 
         assertThat(matcher).isInstanceOf(GlobMatcher.class);
         assertThat(matcher.getPattern()).isEqualTo("*");

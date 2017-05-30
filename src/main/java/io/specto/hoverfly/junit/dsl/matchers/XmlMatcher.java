@@ -7,7 +7,7 @@ import io.specto.hoverfly.junit.dsl.HoverflyDslException;
 
 import java.io.IOException;
 
-public class XmlMatcher implements RequestMatcher {
+public class XmlMatcher implements RequestFieldMatcher {
 
     private static final XmlMapper XML_MAPPER = new XmlMapper();
     private String pattern;
@@ -29,12 +29,12 @@ public class XmlMatcher implements RequestMatcher {
         return pattern;
     }
 
-    static RequestMatcher createFromString(String value) {
+    static RequestFieldMatcher createFromString(String value) {
         validateXml(value);
         return new XmlMatcher(value);
     }
 
-    static RequestMatcher createFromObject(Object value) {
+    static RequestFieldMatcher createFromObject(Object value) {
         try {
             String pattern = XML_MAPPER.writeValueAsString(value);
             return new XmlMatcher(pattern);

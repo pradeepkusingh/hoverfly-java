@@ -6,7 +6,7 @@ import io.specto.hoverfly.junit.core.model.FieldMatcher;
  * See <a href="https://github.com/NodePrime/jsonpath">NodePrime/jsonpath</a> for details of the Json Path supported.
  */
 
-public class JsonPathMatcher implements RequestMatcher {
+public class JsonPathMatcher implements RequestFieldMatcher {
 
     private String pattern;
     private FieldMatcher fieldMatcher;
