@@ -11,7 +11,7 @@ public class GlobMatcherTest {
     @Test
     public void shouldGetFieldMatcher() throws Exception {
 
-        GlobMatcher matcher = GlobMatcher.createFromPattern("fo*o");
+        GlobMatcher matcher = GlobMatcher.newInstance("fo*o");
 
         FieldMatcher fieldMatcher = matcher.getFieldMatcher();
 

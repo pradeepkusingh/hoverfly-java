@@ -13,8 +13,8 @@ public class ExactMatcher implements PlainTextFieldMatcher {
     }
 
 
-    public static ExactMatcher newInstance(String value) {
-        return new ExactMatcher(value);
+    static ExactMatcher newInstance(Object value) {
+        return new ExactMatcher(value.toString());
     }
 
     @Override
