@@ -1,6 +1,5 @@
 package io.specto.hoverfly.junit.dsl.matchers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 import io.specto.hoverfly.junit.dsl.HoverflyDslException;
@@ -32,15 +31,6 @@ public class XmlMatcher implements RequestFieldMatcher {
     static RequestFieldMatcher createFromString(String value) {
         validateXml(value);
         return new XmlMatcher(value);
-    }
-
-    static RequestFieldMatcher createFromObject(Object value) {
-        try {
-            String pattern = XML_MAPPER.writeValueAsString(value);
-            return new XmlMatcher(pattern);
-        } catch (JsonProcessingException e) {
-            throw new HoverflyDslException("Fail to create XmlMatcher from object: " + value);
-        }
     }
 
     private static void validateXml(String value) {
