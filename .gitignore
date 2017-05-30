@@ -1,5 +1,4 @@
 .idea
-**.iml
 requests.db
 src/test/resources/hoverfly/recorded-simulation.json
 .gradle/
@@ -7,9 +6,9 @@ build/
 .DS_Store
 out/
 target/
-classes/
 *scenario.json
 src/test/resources/hoverfly/first-multi-capture**
 src/test/resources/hoverfly/third-multi-capture/**
 src/test/resources/hoverfly/second-multi-capture-scenario.json
 /src/test/resources/hfc-ca-signed.pem
+.floo
