@@ -16,8 +16,8 @@ import io.specto.hoverfly.junit.core.model.FieldMatcher;
 import io.specto.hoverfly.junit.core.model.Request;
 import io.specto.hoverfly.junit.core.model.RequestResponsePair;
 import io.specto.hoverfly.junit.dsl.matchers.ExactMatcher;
-import io.specto.hoverfly.junit.dsl.matchers.PlainTextMatcher;
-import io.specto.hoverfly.junit.dsl.matchers.RequestMatcher;
+import io.specto.hoverfly.junit.dsl.matchers.PlainTextFieldMatcher;
+import io.specto.hoverfly.junit.dsl.matchers.RequestFieldMatcher;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -27,25 +27,26 @@ import java.util.stream.Collectors;
 import static io.specto.hoverfly.junit.core.model.FieldMatcher.blankMatcher;
 import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
 import static io.specto.hoverfly.junit.core.model.FieldMatcher.wildCardMatches;
+import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.any;
 import static org.apache.commons.lang3.CharEncoding.UTF_8;
 
 /**
  * A builder for {@link Request}
  */
-public class RequestTemplateBuilder {
+public class RequestMatcherBuilder {
 
     private final StubServiceBuilder invoker;
     private final FieldMatcher method;
     private final FieldMatcher scheme;
     private final FieldMatcher destination;
     private final FieldMatcher path;
-    private final MultivaluedHashMap<PlainTextMatcher, PlainTextMatcher> queryPatterns = new MultivaluedHashMap<>();
+    private final MultivaluedHashMap<PlainTextFieldMatcher, PlainTextFieldMatcher> queryPatterns = new MultivaluedHashMap<>();
     private final Map<String, List<String>> headers = new HashMap<>();
     private FieldMatcher query = blankMatcher();
     private FieldMatcher body = blankMatcher();
     private boolean isFuzzyMatchedQuery;
 
-    RequestTemplateBuilder(final StubServiceBuilder invoker, final FieldMatcher method, final FieldMatcher scheme, final FieldMatcher destination, final FieldMatcher path) {
+    RequestMatcherBuilder(final StubServiceBuilder invoker, final FieldMatcher method, final FieldMatcher scheme, final FieldMatcher destination, final FieldMatcher path) {
         this.invoker = invoker;
         this.method = method;
         this.scheme = scheme;
@@ -56,9 +57,9 @@ public class RequestTemplateBuilder {
     /**
      * Sets the request body
      * @param body the request body to match on exactly
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder body(final String body) {
+    public RequestMatcherBuilder body(final String body) {
         this.body = exactlyMatches(body);
         return this;
     }
@@ -66,20 +67,20 @@ public class RequestTemplateBuilder {
     /**
      * Sets the request body using {@link HttpBodyConverter} to match on exactly
      * @param httpBodyConverter custom http body converter
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
     @Deprecated
-    public RequestTemplateBuilder body(HttpBodyConverter httpBodyConverter) {
+    public RequestMatcherBuilder body(HttpBodyConverter httpBodyConverter) {
         this.body = exactlyMatches(httpBodyConverter.body());
         return this;
     }
 
-    public RequestTemplateBuilder body(RequestMatcher matcher) {
+    public RequestMatcherBuilder body(RequestFieldMatcher matcher) {
         this.body = matcher.getFieldMatcher();
         return this;
     }
 
-    public RequestTemplateBuilder anyBody() {
+    public RequestMatcherBuilder anyBody() {
         this.body = null;
         return this;
     }
@@ -88,9 +89,9 @@ public class RequestTemplateBuilder {
      * Sets one request header
      * @param key the header key to match on
      * @param value the header value to match on
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder header(final String key, final String value) {
+    public RequestMatcherBuilder header(final String key, final String value) {
         headers.put(key, Collections.singletonList(value));
         return this;
     }
@@ -99,32 +100,35 @@ public class RequestTemplateBuilder {
      * Sets the request query
      * @param key the query params key to match on
      * @param values the query params values to match on
-     * @return the {@link RequestTemplateBuilder} for further customizations
+     * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    public RequestTemplateBuilder queryParam(final String key, final Object... values) {
+    public RequestMatcherBuilder queryParam(final String key, final Object... values) {
+        if (values.length == 0 ) {
+            return queryParam(ExactMatcher.newInstance(key), any());
+        }
+
         for(Object value : values) {
             queryPatterns.add(ExactMatcher.newInstance(key),ExactMatcher.newInstance(value.toString()));
         }
         return this;
     }
 
-    public RequestTemplateBuilder queryParam(final String key, final PlainTextMatcher value) {
+    public RequestMatcherBuilder queryParam(final String key, final PlainTextFieldMatcher value) {
         return queryParam(ExactMatcher.newInstance(key), value);
     }
 
-    public RequestTemplateBuilder queryParam(final PlainTextMatcher key, final String value) {
+    public RequestMatcherBuilder queryParam(final PlainTextFieldMatcher key, final String value) {
         return queryParam(key, ExactMatcher.newInstance(value));
     }
 
-    public RequestTemplateBuilder queryParam(final PlainTextMatcher key, final PlainTextMatcher value) {
+
+    public RequestMatcherBuilder queryParam(final PlainTextFieldMatcher key, final PlainTextFieldMatcher value) {
         isFuzzyMatchedQuery = true;
         queryPatterns.add(key, value);
         return this;
     }
 
-
-
-    public RequestTemplateBuilder anyQueryParams() {
+    public RequestMatcherBuilder anyQueryParams() {
         query = null;
         return this;
     }
@@ -132,7 +136,7 @@ public class RequestTemplateBuilder {
     /**
      * Sets the expected response
      * @param responseBuilder the builder for response
-     * @return the {@link StubServiceBuilder} for chaining the next {@link RequestTemplateBuilder}
+     * @return the {@link StubServiceBuilder} for chaining the next {@link RequestMatcherBuilder}
      * @see ResponseBuilder
      */
     public StubServiceBuilder willReturn(final ResponseBuilder responseBuilder) {

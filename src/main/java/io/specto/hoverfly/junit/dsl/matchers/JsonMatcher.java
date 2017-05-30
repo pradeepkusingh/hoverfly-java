@@ -7,7 +7,7 @@ import io.specto.hoverfly.junit.dsl.HoverflyDslException;
 
 import java.io.IOException;
 
-public class JsonMatcher implements RequestMatcher {
+public class JsonMatcher implements RequestFieldMatcher {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private String pattern;

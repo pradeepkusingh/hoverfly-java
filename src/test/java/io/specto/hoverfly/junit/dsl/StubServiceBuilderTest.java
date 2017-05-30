@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Iterables;
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 import io.specto.hoverfly.junit.core.model.RequestResponsePair;
-import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -14,14 +13,11 @@ import org.junit.Test;
 import java.util.Set;
 
 import static io.specto.hoverfly.assertions.Assertions.assertThat;
-import static io.specto.hoverfly.assertions.Header.header;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.json;
 import static io.specto.hoverfly.junit.dsl.ResponseBuilder.response;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
-import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.any;
-import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.endsWith;
-import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.matches;
+import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.*;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
@@ -292,6 +288,20 @@ public class StubServiceBuilderTest {
         assertThat(pairs).hasSize(1);
         FieldMatcher query = Iterables.getLast(pairs).getRequest().getQuery();
         assertThat(query.getGlobMatch()).isEqualTo("page=*&category=food");
+    }
+
+    @Test
+    public void shouldBuildQueryParamMatcherThatIgnoresValue() throws Exception {
+        // When
+        final Set<RequestResponsePair> pairs = service("www.base-url.com").get("/")
+                .queryParam("page")
+                .queryParam("size")
+                .willReturn(response()).getRequestResponsePairs();
+
+        // Then
+        assertThat(pairs).hasSize(1);
+        FieldMatcher query = Iterables.getLast(pairs).getRequest().getQuery();
+        assertThat(query.getGlobMatch()).isEqualTo("page=*&size=*");
     }
 
     @Test

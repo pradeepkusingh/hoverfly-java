@@ -2,7 +2,7 @@ package io.specto.hoverfly.junit.dsl.matchers;
 
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 
-public class ExactMatcher implements PlainTextMatcher {
+public class ExactMatcher implements PlainTextFieldMatcher {
 
     private String pattern;
     private FieldMatcher fieldMatcher;
