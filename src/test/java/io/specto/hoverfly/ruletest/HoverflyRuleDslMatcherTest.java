@@ -1,5 +1,6 @@
 package io.specto.hoverfly.ruletest;
 
+import io.specto.hoverfly.junit.dsl.HttpBodyConverter;
 import io.specto.hoverfly.junit.rule.HoverflyRule;
 import io.specto.hoverfly.models.SimpleBooking;
 import org.junit.ClassRule;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import static io.specto.hoverfly.junit.core.SimulationSource.dsl;
 import static io.specto.hoverfly.junit.dsl.HoverflyDsl.service;
 import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.json;
+import static io.specto.hoverfly.junit.dsl.HttpBodyConverter.xml;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.created;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.serverError;
 import static io.specto.hoverfly.junit.dsl.ResponseCreators.success;
@@ -51,9 +53,13 @@ public class HoverflyRuleDslMatcherTest {
                     .anyQueryParams()
                     .willReturn(success(json(booking)))
 
-                    // Match json body
+                    // Match XML body
                     .put("/api/bookings/1")
                     .body(equalsToJson("{\"flightId\":\"1\",\"class\":\"PREMIUM\"}"))
+                    .willReturn(success())
+
+                    .put("/api/bookings/1")
+                    .body(equalsToJson(json(booking)))
                     .willReturn(success())
 
                     // JsonPath Matcher
@@ -62,9 +68,13 @@ public class HoverflyRuleDslMatcherTest {
                     .body(matchesJsonPath("$.flightId"))
                     .willReturn(created("http://localhost/api/bookings/1"))
 
-                    // Match xml body
+                    // Match XML body
                     .put("/api/bookings/1")
                     .body(equalsToXml("<?xml version=\"1.0\" encoding=\"UTF-8\" ?> <flightId>1</flightId> <class>PREMIUM</class>"))
+                    .willReturn(success())
+
+                    .put("/api/bookings/1")
+                    .body(equalsToXml(xml(booking)))
                     .willReturn(success())
 
                     // XmlPath Matcher
@@ -205,6 +215,20 @@ public class HoverflyRuleDslMatcherTest {
     }
 
     @Test
+    public void shouldBeAbleToMatchBodyByJsonEqualityWithHttpBodyConverter() throws Exception {
+        // Given
+        final RequestEntity<String> bookFlightRequest = RequestEntity.put(new URI("http://www.my-test.com/api/bookings/1"))
+                .contentType(APPLICATION_JSON)
+                .body(HttpBodyConverter.OBJECT_MAPPER.writeValueAsString(booking));
+
+        // When
+        final ResponseEntity<String> bookFlightResponse = restTemplate.exchange(bookFlightRequest, String.class);
+
+        // Then
+        assertThat(bookFlightResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
     public void shouldBeAbleToMatchBodyByJsonPath() throws Exception {
         // Given
         final RequestEntity<String> bookFlightRequest = RequestEntity.post(new URI("http://www.my-test.com/api/bookings"))
@@ -225,6 +249,20 @@ public class HoverflyRuleDslMatcherTest {
         final RequestEntity<String> bookFlightRequest = RequestEntity.put(new URI("http://www.my-test.com/api/bookings/1"))
                 .contentType(APPLICATION_XML)
                 .body("<?xml version=\"1.0\" encoding=\"UTF-8\" ?> <flightId>1</flightId> <class>PREMIUM</class>");
+
+        // When
+        final ResponseEntity<String> bookFlightResponse = restTemplate.exchange(bookFlightRequest, String.class);
+
+        // Then
+        assertThat(bookFlightResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    @Test
+    public void shouldBeAbleToMatchBodyByXmlEqualityWithHttpBodyConverter() throws Exception {
+        // Given
+        final RequestEntity<String> bookFlightRequest = RequestEntity.put(new URI("http://www.my-test.com/api/bookings/1"))
+                .contentType(APPLICATION_XML)
+                .body(HttpBodyConverter.XML_MAPPER.writeValueAsString(booking));
 
         // When
         final ResponseEntity<String> bookFlightResponse = restTemplate.exchange(bookFlightRequest, String.class);
