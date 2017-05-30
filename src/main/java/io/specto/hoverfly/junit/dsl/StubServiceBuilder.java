@@ -13,17 +13,13 @@
 package io.specto.hoverfly.junit.dsl;
 
 import io.specto.hoverfly.junit.core.model.*;
-import io.specto.hoverfly.junit.dsl.matchers.ExactMatcher;
 import io.specto.hoverfly.junit.dsl.matchers.PlainTextFieldMatcher;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
+import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.equalsTo;
 
 
 /**
@@ -67,7 +63,7 @@ public class StubServiceBuilder {
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
     public RequestMatcherBuilder get(final String path) {
-        return get(ExactMatcher.newInstance(path));
+        return get(equalsTo(path));
     }
 
     public RequestMatcherBuilder get(final PlainTextFieldMatcher path) {
@@ -81,7 +77,7 @@ public class StubServiceBuilder {
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
     public RequestMatcherBuilder delete(final String path) {
-        return delete(ExactMatcher.newInstance(path));
+        return delete(equalsTo(path));
     }
 
     public RequestMatcherBuilder delete(PlainTextFieldMatcher path) {
@@ -95,7 +91,7 @@ public class StubServiceBuilder {
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
     public RequestMatcherBuilder put(final String path) {
-        return put(ExactMatcher.newInstance(path));
+        return put(equalsTo(path));
     }
 
 
@@ -110,7 +106,7 @@ public class StubServiceBuilder {
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
     public RequestMatcherBuilder post(final String path) {
-        return post(ExactMatcher.newInstance(path));
+        return post(equalsTo(path));
     }
 
     public RequestMatcherBuilder post(PlainTextFieldMatcher path) {
@@ -124,7 +120,7 @@ public class StubServiceBuilder {
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
     public RequestMatcherBuilder patch(final String path) {
-        return patch(ExactMatcher.newInstance(path));
+        return patch(equalsTo(path));
     }
 
     public RequestMatcherBuilder patch(PlainTextFieldMatcher path) {
@@ -132,7 +128,7 @@ public class StubServiceBuilder {
     }
 
     public RequestMatcherBuilder anyMethod(String path) {
-        return anyMethod(ExactMatcher.newInstance(path));
+        return anyMethod(equalsTo(path));
     }
 
     public RequestMatcherBuilder anyMethod(PlainTextFieldMatcher path) {

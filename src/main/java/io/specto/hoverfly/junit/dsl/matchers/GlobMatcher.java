@@ -13,15 +13,9 @@ class GlobMatcher implements PlainTextFieldMatcher {
         this.fieldMatcher = FieldMatcher.wildCardMatches(pattern);
     }
 
-    static GlobMatcher createFromPattern(String pattern) {
+    static GlobMatcher newInstance(String pattern) {
         return new GlobMatcher(pattern);
     }
-
-    static GlobMatcher createFromStringFormat(String format, String value) {
-        String pattern = String.format(format, value);
-        return new GlobMatcher(pattern);
-    }
-
 
     @Override
     public FieldMatcher getFieldMatcher() {

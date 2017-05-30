@@ -15,7 +15,7 @@ package io.specto.hoverfly.junit.dsl;
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 import io.specto.hoverfly.junit.core.model.Request;
 import io.specto.hoverfly.junit.core.model.RequestResponsePair;
-import io.specto.hoverfly.junit.dsl.matchers.ExactMatcher;
+import io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers;
 import io.specto.hoverfly.junit.dsl.matchers.PlainTextFieldMatcher;
 import io.specto.hoverfly.junit.dsl.matchers.RequestFieldMatcher;
 
@@ -28,6 +28,7 @@ import static io.specto.hoverfly.junit.core.model.FieldMatcher.blankMatcher;
 import static io.specto.hoverfly.junit.core.model.FieldMatcher.exactlyMatches;
 import static io.specto.hoverfly.junit.core.model.FieldMatcher.wildCardMatches;
 import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.any;
+import static io.specto.hoverfly.junit.dsl.matchers.HoverflyMatchers.equalsTo;
 import static org.apache.commons.lang3.CharEncoding.UTF_8;
 
 /**
@@ -103,21 +104,21 @@ public class RequestMatcherBuilder {
      */
     public RequestMatcherBuilder queryParam(final String key, final Object... values) {
         if (values.length == 0 ) {
-            return queryParam(ExactMatcher.newInstance(key), any());
+            return queryParam(HoverflyMatchers.equalsTo(key), any());
         }
 
         for(Object value : values) {
-            queryPatterns.add(ExactMatcher.newInstance(key),ExactMatcher.newInstance(value.toString()));
+            queryPatterns.add(equalsTo(key), equalsTo(value));
         }
         return this;
     }
 
     public RequestMatcherBuilder queryParam(final String key, final PlainTextFieldMatcher value) {
-        return queryParam(ExactMatcher.newInstance(key), value);
+        return queryParam(equalsTo(key), value);
     }
 
     public RequestMatcherBuilder queryParam(final PlainTextFieldMatcher key, final String value) {
-        return queryParam(key, ExactMatcher.newInstance(value));
+        return queryParam(key, equalsTo(value));
     }
 
 
