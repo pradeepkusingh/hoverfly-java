@@ -1,5 +1,7 @@
 package io.specto.hoverfly.junit.dsl.matchers;
 
+import io.specto.hoverfly.junit.dsl.HttpBodyConverter;
+
 public class HoverflyMatchers {
 
     public static PlainTextFieldMatcher matches(String value) {
@@ -14,8 +16,8 @@ public class HoverflyMatchers {
         return JsonMatcher.createFromString(value);
     }
 
-    public static RequestFieldMatcher equalsToJson(Object value) {
-        return JsonMatcher.createFromObject(value);
+    public static RequestFieldMatcher equalsToJson(HttpBodyConverter converter) {
+        return JsonMatcher.createFromString(converter.body());
     }
 
     public static RequestFieldMatcher matchesJsonPath(String expression) {
@@ -26,8 +28,8 @@ public class HoverflyMatchers {
         return XmlMatcher.createFromString(value);
     }
 
-    public static RequestFieldMatcher equalsToXml(Object value) {
-        return XmlMatcher.createFromObject(value);
+    public static RequestFieldMatcher equalsToXml(HttpBodyConverter converter) {
+        return XmlMatcher.createFromString(converter.body());
     }
 
     public static RequestFieldMatcher matchesXPath(String expression) {

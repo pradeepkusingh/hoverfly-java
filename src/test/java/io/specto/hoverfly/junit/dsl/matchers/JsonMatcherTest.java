@@ -1,15 +1,10 @@
 package io.specto.hoverfly.junit.dsl.matchers;
 
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.specto.hoverfly.junit.core.model.FieldMatcher;
 import io.specto.hoverfly.junit.dsl.HoverflyDslException;
-import io.specto.hoverfly.models.SimpleBooking;
 import org.json.JSONObject;
 import org.junit.Test;
-
-import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,16 +28,6 @@ public class JsonMatcherTest {
                 .isInstanceOf(HoverflyDslException.class)
                 .hasMessageContaining("Fail to create JsonMatcher from invalid JSON string");
 
-    }
-
-    @Test
-    public void shouldCreateJsonMatcherFromObject() throws Exception {
-        SimpleBooking booking = new SimpleBooking(1, "London", "Hong Kong", LocalDate.now());
-        FieldMatcher actual = JsonMatcher.createFromObject(booking).getFieldMatcher();
-
-        FieldMatcher expected = new FieldMatcher.Builder().jsonMatch(new ObjectMapper().writeValueAsString(booking)).build();
-
-        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

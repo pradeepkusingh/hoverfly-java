@@ -69,7 +69,6 @@ public class RequestMatcherBuilder {
      * @param httpBodyConverter custom http body converter
      * @return the {@link RequestMatcherBuilder} for further customizations
      */
-    @Deprecated
     public RequestMatcherBuilder body(HttpBodyConverter httpBodyConverter) {
         this.body = exactlyMatches(httpBodyConverter.body());
         return this;
