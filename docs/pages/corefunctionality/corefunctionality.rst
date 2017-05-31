@@ -12,6 +12,7 @@ This section describes the core functionality of Hoverfly Java.
     capturing
     sources
     dsl
+    matchers
     conversion
     configuration
     ssl
