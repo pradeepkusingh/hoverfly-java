@@ -26,8 +26,8 @@ In addition, Hoverfly should be initialized before Apache HttpClient to ensure t
 
 There are several options to achieve this:
 
-* Use `@ClassRule` and it guarantees that `HoverflyRule` is executed at the very start and end of the test case
-* If using `@Rule` is inevitable, you should initialize the HttpClient inside your `@Before` setUp method which will be executed after `@Rule`
+* Use ``@ClassRule`` and it guarantees that ``HoverflyRule`` is executed at the very start and end of the test case
+* If using ``@Rule`` is inevitable, you should initialize the HttpClient inside your ``@Before`` setUp method which will be executed after ``@Rule``
 * As a last resort, you may want to manually configured Apache HttpClient to use custom proxy or SSL context, please check out `HttpClient examples <https://hc.apache.org/httpcomponents-client-ga/examples.html>`_
 
 Legacy Schema Migration

@@ -25,7 +25,7 @@ Capture
 File is relative to ``src/test/resources/hoverfly``.
 
 Multi-Capture
--------
+-------------
 
 .. code-block:: java
 
@@ -60,5 +60,5 @@ File is relative to ``src/test/resources/hoverfly``.
 Use @ClassRule
 --------------
 
-It is recommended to boot Hoverfly once and share it across multiple tests by using a `@ClassRule` rather than `@Rule`.  This means you don't have the overhead of starting one process per test,
+It is recommended to boot Hoverfly once and share it across multiple tests by using a ``@ClassRule`` rather than ``@Rule``.  This means you don't have the overhead of starting one process per test,
 and also guarantees that all your system properties are set correctly before executing any of your test code.

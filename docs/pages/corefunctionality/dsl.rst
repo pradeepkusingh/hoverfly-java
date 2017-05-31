@@ -27,9 +27,9 @@ The rule is fluent and hierarchical, allowing you to define multiple service end
             .willReturn(noContent())
     )
 
-The entry point for the DSL is `HoverflyDSL.service`.  After calling this you can provide a `method` and `path`, followed by optional request components.
-You can then use `willReturn` to state which response you want when there is a match, which takes `responseBuilder` object that you can instantiate directly,
-or via the helper class `ResponseCreators`.
+The entry point for the DSL is ``HoverflyDSL.service``.  After calling this you can provide a ``method`` and ``path``, followed by optional request components.
+You can then use ``willReturn`` to state which response you want when there is a match, which takes ``ResponseBuilder`` object that you can instantiate directly,
+or via the helper class ``ResponseCreators``.
 
 You can also simulate fixed network delay using DSL.
 

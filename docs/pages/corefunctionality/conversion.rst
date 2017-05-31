@@ -3,9 +3,17 @@
 Conversion
 ==========
 
-There is currently a `BodyConverter` interface which can be used to serialise Java objects into strings, and also set a content type header automatically
+There is currently an ``HttpBodyConverter`` interface which can be used to marshall Java objects into strings, and also set a content type header automatically.
+
+It can be used for both request and response body, and supports JSON and XML data format out-of-the-box.
 
 .. code-block:: java
 
-    .body(json(new JsonObject("foo", "bar"))) // default
-    .body(json(new JsonObject("foo", "bar"), myObjectMapper)) // Object mapper configured
+    // For request body matcher
+
+    .body(equalsToJson(json(myObject)))     // with default objectMapper
+    .body(equalsToJson(json(myObject, myObjectMapper)))     // with custom objectMapper
+
+    // For response body
+    .body(xml(myObject))
+    .body(xml(myObject, myObjectMapper))
