@@ -9,7 +9,7 @@ The rule is fluent and hierarchical, allowing you to define multiple service end
 
 .. code-block:: java
 
-    simulationSource.dsl(
+    SimulationSource.dsl(
         service("www.my-test.com")
 
             .post("/api/bookings").body("{\"flightId\": \"1\"}")
@@ -37,7 +37,7 @@ Global delays can be set for all requests or for a particular HTTP method:
 
 .. code-block:: java
 
-    simulationSource.dsl(
+    SimulationSource.dsl(
         service("www.slow-service.com")
             .andDelay(3, TimeUnit.SECONDS).forAll(),
 
@@ -49,7 +49,7 @@ Per-request delay can be set as follows:
 
 .. code-block:: java
 
-    simulationSource.dsl(
+    SimulationSource.dsl(
         service("www.not-so-slow-service.com")
             .get("/api/bookings")
             .willReturn(success().withDelay(1, TimeUnit.SECONDS))

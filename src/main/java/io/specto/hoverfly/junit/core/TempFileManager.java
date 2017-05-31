@@ -48,7 +48,7 @@ class TempFileManager {
     Path copyClassPathResource(String resourcePath, String targetName) {
         URL sourceUrl = HoverflyUtils.findResourceOnClasspath(resourcePath);
 
-        Path targetPath = getOrCreateTempDirecotry().resolve(targetName);
+        Path targetPath = getOrCreateTempDirectory().resolve(targetName);
         try {
             FileUtils.copyURLToFile(sourceUrl, targetPath.toFile());
         } catch (IOException e) {
@@ -66,7 +66,7 @@ class TempFileManager {
         String binaryName = systemConfig.getHoverflyBinaryName();
         LOGGER.info("Selecting the following binary based on the current operating system: {}", binaryName);
         final URL sourceUrl = findResourceOnClasspath(HOVERFLY_BINARIES_ROOT_PATH + binaryName);
-        final Path targetPath = getOrCreateTempDirecotry().resolve(binaryName);
+        final Path targetPath = getOrCreateTempDirectory().resolve(binaryName);
         LOGGER.info("Storing binary in temporary directory {}", targetPath);
         final File targetFile = targetPath.toFile();
         try {
@@ -95,7 +95,7 @@ class TempFileManager {
     /**
      * Get or create temporary directory
      */
-    private Path getOrCreateTempDirecotry() {
+    private Path getOrCreateTempDirectory() {
         if (tempDirectory == null) {
 
             try {
